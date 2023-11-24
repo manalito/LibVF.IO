@@ -508,7 +508,7 @@ function patch_nv() {
       $current_path/optional/*.run --apply-patch $current_path/patches/460/twelve.patch
     fi
   # Checking if the optional driver is version 510
-  elif [[ ($optional_driver_version -eq 510) ]];then
+  elif [[ ($optional_driver_version -eq 535) ]];then
     echo "A kernel support patch isn't currently needed for this driver version."
     echo "Would you like to auto-merge optional drivers using vGPU-Unlock-Patcher?"
     read -p "(y/n)?" automerge_prompt_response
@@ -517,9 +517,9 @@ function patch_nv() {
       cd $current_path/optional/
       git clone --recursive https://github.com/VGPU-Community-Drivers/vGPU-Unlock-patcher
       cd *-patcher/
-      git checkout 510.85
+      git checkout 535.129
       mv ../*.run ./
-      ./patch.sh general-merge
+      ./patch.sh general-merge --lk6-patches
       # Move resulting merged driver up a directory
       mv *-patched* ../
       cd ..
@@ -552,7 +552,7 @@ function install_nv() {
     sudo mokutil --import ~/.ssh/module-public.key
     echo "Installing 460."
     sudo $current_path/optional/*$custom.run --module-signing-secret-key=$HOME/.ssh/module-private.key --module-signing-public-key=$HOME/.ssh/module-public.key -q --no-x-check
-  elif [[ ($optional_driver_version -eq 510) ]];then
+  elif [[ ($optional_driver_version -eq 535) ]];then
     echo "Installing 510 via DKMS."
     # -- install patched kernel modules manually to set IGNORE_CC_MISMATCH=1 --
     installer_path=$(ls -d $current_path/optional/*patched*)
